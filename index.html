@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f8f5">
+    <title>Fieldnotes — Gear for the outside</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #17251d;
+            --muted: #66736a;
+            --green: #315b43;
+            --green-dark: #244432;
+            --lime: #d8edaa;
+            --cream: #f7f8f5;
+            --line: #e1e7df;
+            --white: #fff;
+            --serif: Georgia, "Times New Roman", serif;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background: var(--cream);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        .container {
+            width: min(1160px, calc(100% - 48px));
+            margin-inline: auto;
+        }
+
+        /* Navbar: flex aligns the brand, links, and call to action. */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgb(247 248 245 / 94%);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgb(225 231 223 / 75%);
+        }
+
+        .nav {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 28px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 760;
+            letter-spacing: -.04em;
+            font-size: 1.2rem;
+            white-space: nowrap;
+        }
+
+        .brand-mark {
+            display: grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            color: var(--green-dark);
+            background: var(--lime);
+            border-radius: 11px;
+            font-size: 19px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            margin-left: auto;
+            color: #46564b;
+            font-size: .91rem;
+        }
+
+        .nav-links a:hover,
+        .footer-links a:hover {
+            color: var(--green);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .nav-login {
+            color: #46564b;
+            font-size: .9rem;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            min-height: 46px;
+            padding: 0 20px;
+            border: 0;
+            border-radius: 999px;
+            font-weight: 650;
+            cursor: pointer;
+            transition: transform .18s ease, background .18s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-dark {
+            color: white;
+            background: var(--green);
+        }
+
+        .button-dark:hover {
+            background: var(--green-dark);
+        }
+
+        .button-light {
+            color: var(--ink);
+            background: white;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--line);
+            background: white;
+            border-radius: 50%;
+            color: var(--ink);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Hero uses flex-wrap so its text and artwork stack naturally on small screens. */
+        .hero {
+            padding: 58px 0 70px;
+        }
+
+        .hero-inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 44px;
+        }
+
+        .hero-copy {
+            flex: 1 1 420px;
+            max-width: 570px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 20px;
+            color: var(--green);
+            font-size: .76rem;
+            font-weight: 750;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 22px;
+            height: 1px;
+            background: currentColor;
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        h1 {
+            max-width: 600px;
+            margin-bottom: 20px;
+            font-family: var(--serif);
+            font-size: clamp(3.3rem, 7vw, 5.8rem);
+            font-weight: 500;
+            letter-spacing: -.065em;
+            line-height: .98;
+        }
+
+        h1 em {
+            color: var(--green);
+            font-weight: 500;
+        }
+
+        .hero-copy>p:not(.eyebrow) {
+            max-width: 450px;
+            margin-bottom: 28px;
+            color: var(--muted);
+            font-size: 1.08rem;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .text-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 12px 10px;
+            font-size: .94rem;
+            font-weight: 650;
+        }
+
+        .text-link span {
+            transition: transform .18s ease;
+        }
+
+        .text-link:hover span {
+            transform: translateX(4px);
+        }
+
+        .hero-art {
+            position: relative;
+            flex: 1 1 390px;
+            min-height: 380px;
+            overflow: hidden;
+            border-radius: 28px;
+            background: #dbe5d5;
+        }
+
+        .hero-art::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 54%, rgb(17 38 26 / 35%));
+            z-index: 1;
+        }
+
+        .hero-art img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .art-label {
+            position: absolute;
+            z-index: 2;
+            left: 24px;
+            bottom: 22px;
+            color: white;
+            font-size: .86rem;
+            font-weight: 600;
+        }
+
+        .art-label small {
+            display: block;
+            margin-top: 5px;
+            font-weight: 400;
+            opacity: .8;
+        }
+
+        .floating-note {
+            position: absolute;
+            z-index: 2;
+            right: 20px;
+            top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            background: rgb(255 255 255 / 92%);
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgb(28 50 33 / 12%);
+            font-size: .8rem;
+            font-weight: 650;
+        }
+
+        .note-icon {
+            display: grid;
+            place-items: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            color: var(--green-dark);
+            background: var(--lime);
+        }
+
+        .trust {
+            padding: 0 0 72px;
+        }
+
+        .trust-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 22px 0;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            color: #7a857c;
+        }
+
+        .trust-row p {
+            margin: 0;
+            font-size: .76rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .trust-logos {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            flex: 1 1 580px;
+            gap: 16px 30px;
+            color: #536257;
+            font-family: var(--serif);
+            font-size: 1.25rem;
+        }
+
+        .section {
+            padding: 76px 0;
+        }
+
+        .section-heading {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .section-heading h2 {
+            max-width: 570px;
+            margin: 0;
+            font-family: var(--serif);
+            font-size: clamp(2.2rem, 4vw, 3.3rem);
+            font-weight: 500;
+            letter-spacing: -.05em;
+            line-height: 1.05;
+        }
+
+        .section-heading p {
+            max-width: 330px;
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .products {
+            background: #edf1eb;
+        }
+
+        /* Product listing: flex-wrap + flex-grow + flex-basis creates responsive cards. */
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .product-card {
+            display: flex;
+            flex: 1 1 245px;
+            flex-direction: column;
+            min-width: 0;
+            padding: 12px;
+            background: white;
+            border: 1px solid #e5eae3;
+            border-radius: 20px;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 35px rgb(33 55 39 / 9%);
+        }
+
+        .product-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+            border-radius: 13px;
+            background: #e5e9df;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .4s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.04);
+        }
+
+        .tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 7px 10px;
+            background: rgb(255 255 255 / 92%);
+            border-radius: 999px;
+            font-size: .7rem;
+            font-weight: 700;
+        }
+
+        .product-info {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px 12px;
+            padding: 16px 5px 6px;
+        }
+
+        .product-info h3 {
+            margin: 0;
+            font-size: .96rem;
+        }
+
+        .product-info p {
+            flex-basis: 100%;
+            margin: 0;
+            color: var(--muted);
+            font-size: .84rem;
+        }
+
+        .price {
+            color: var(--green-dark);
+            font-size: .9rem;
+            font-weight: 750;
+        }
+
+        .center-link {
+            display: flex;
+            justify-content: center;
+            margin-top: 26px;
+        }
+
+        .membership {
+            padding: 88px 0;
+        }
+
+        .membership-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch;
+            gap: 48px;
+        }
+
+        .membership-copy {
+            flex: 1 1 270px;
+            align-self: center;
+        }
+
+        .membership-copy h2 {
+            max-width: 440px;
+            margin-bottom: 18px;
+            font-family: var(--serif);
+            font-size: clamp(2.3rem, 4vw, 3.6rem);
+            font-weight: 500;
+            letter-spacing: -.055em;
+            line-height: 1.05;
+        }
+
+        .membership-copy>p:not(.eyebrow) {
+            max-width: 390px;
+            margin-bottom: 22px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .perks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .perk {
+            padding: 9px 13px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: #4b5b50;
+            font-size: .78rem;
+        }
+
+        /* Pricing cards use equal flex-basis and grow to fill the row. */
+        .price-grid {
+            display: flex;
+            flex: 1 1 530px;
+            flex-wrap: wrap;
+            align-items: stretch;
+            gap: 14px;
+        }
+
+        .price-card {
+            display: flex;
+            flex: 1 1 220px;
+            flex-direction: column;
+            padding: 23px;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            background: white;
+        }
+
+        .price-card.featured {
+            color: white;
+            background: var(--green);
+            border-color: var(--green);
+        }
+
+        .price-card h3 {
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .price-card .plan-desc {
+            min-height: 42px;
+            margin-bottom: 18px;
+            color: var(--muted);
+            font-size: .82rem;
+            line-height: 1.5;
+        }
+
+        .featured .plan-desc,
+        .featured .plan-features {
+            color: rgb(255 255 255 / 76%);
+        }
+
+        .amount {
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .amount strong {
+            font-family: var(--serif);
+            font-size: 2.6rem;
+            font-weight: 500;
+            letter-spacing: -.06em;
+        }
+
+        .amount span {
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        .featured .amount span {
+            color: rgb(255 255 255 / 70%);
+        }
+
+        .plan-features {
+            display: grid;
+            gap: 11px;
+            margin: 0 0 22px;
+            padding: 0;
+            list-style: none;
+            color: #5c6a60;
+            font-size: .82rem;
+        }
+
+        .plan-features li::before {
+            content: "✓";
+            margin-right: 8px;
+            color: #71944b;
+            font-weight: 800;
+        }
+
+        .featured .plan-features li::before {
+            color: var(--lime);
+        }
+
+        .price-card .button {
+            width: 100%;
+            margin-top: auto;
+            min-height: 42px;
+            font-size: .84rem;
+        }
+
+        /* Login form: justify-content and align-items centre it within the panel. */
+        .login-section {
+            padding: 30px 0 90px;
+        }
+
+        .login-panel {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-around;
+            gap: 35px;
+            padding: 40px;
+            background: #e8eee5;
+            border-radius: 26px;
+        }
+
+        .login-copy {
+            flex: 1 1 220px;
+            max-width: 330px;
+        }
+
+        .login-copy h2 {
+            margin-bottom: 10px;
+            font-family: var(--serif);
+            font-size: 2.1rem;
+            font-weight: 500;
+            letter-spacing: -.04em;
+        }
+
+        .login-copy p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .login-form {
+            display: flex;
+            flex: 0 1 460px;
+            flex-wrap: wrap;
+            align-items: end;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+        }
+
+        .field {
+            display: grid;
+            flex: 1 1 190px;
+            gap: 7px;
+        }
+
+        .field label {
+            color: #647168;
+            font-size: .73rem;
+            font-weight: 700;
+        }
+
+        .field input {
+            width: 100%;
+            min-height: 44px;
+            padding: 0 13px;
+            border: 1px solid #dce3da;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .field input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgb(49 91 67 / 12%);
+        }
+
+        .login-form .button {
+            min-height: 44px;
+        }
+
+        .form-status {
+            flex-basis: 100%;
+            min-height: 18px;
+            margin: 0;
+            color: var(--green);
+            font-size: .8rem;
+            text-align: center;
+        }
+
+        footer {
+            padding: 28px 0;
+            border-top: 1px solid var(--line);
+        }
+
+        .footer-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .footer-row p {
+            margin: 0;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            color: #56645a;
+            font-size: .82rem;
+        }
+
+        @media (max-width: 760px) {
+            .container {
+                width: min(100% - 36px, 600px);
+            }
+
+            .nav {
+                min-height: 68px;
+                gap: 12px;
+            }
+
+            .menu-toggle {
+                display: inline-grid;
+                place-items: center;
+                order: 3;
+            }
+
+            .nav-actions {
+                margin-left: auto;
+            }
+
+            .nav-login {
+                display: none;
+            }
+
+            .nav-actions .button {
+                min-height: 40px;
+                padding: 0 15px;
+                font-size: .82rem;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: calc(100% + 1px);
+                left: 0;
+                right: 0;
+                display: none;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                padding: 8px 24px 16px;
+                background: var(--cream);
+                border-bottom: 1px solid var(--line);
+            }
+
+            .nav-links.is-open {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 13px 0;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .nav-links a:last-child {
+                border-bottom: 0;
+            }
+
+            .hero {
+                padding: 42px 0 52px;
+            }
+
+            .hero-inner {
+                gap: 30px;
+            }
+
+            .hero-art {
+                min-height: 330px;
+            }
+
+            .trust {
+                padding-bottom: 52px;
+            }
+
+            .section {
+                padding: 58px 0;
+            }
+
+            .membership {
+                padding: 62px 0;
+            }
+
+            .login-panel {
+                padding: 28px 20px;
+            }
+
+            .login-copy {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: calc(100% - 30px);
+            }
+
+            .brand {
+                font-size: 1.08rem;
+            }
+
+            .brand-mark {
+                width: 31px;
+                height: 31px;
+            }
+
+            .nav-actions .button {
+                display: none;
+            }
+
+            h1 {
+                font-size: clamp(3rem, 16vw, 4.1rem);
+            }
+
+            .hero-art {
+                min-height: 285px;
+                border-radius: 21px;
+            }
+
+            .floating-note {
+                top: 12px;
+                right: 12px;
+            }
+
+            .trust-row {
+                align-items: flex-start;
+            }
+
+            .trust-logos {
+                flex-basis: 100%;
+                font-size: 1.1rem;
+            }
+
+            .product-image {
+                height: 205px;
+            }
+
+            .price-card {
+                flex-basis: 100%;
+            }
+
+            .login-form {
+                padding: 16px;
+            }
+
+            .footer-row {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="nav container" aria-label="Main navigation">
+            <a class="brand" href="#home" aria-label="Fieldnotes home"><span class="brand-mark"
+                    aria-hidden="true">✳</span>fieldnotes</a>
+            <div class="nav-links" id="nav-links">
+                <a href="#shop">Shop</a>
+                <a href="#story">Our story</a>
+                <a href="#membership">Membership</a>
+            </div>
+            <div class="nav-actions">
+                <a class="nav-login" href="#login">Log in</a>
+                <a class="button button-dark" href="#shop">Explore gear <span aria-hidden="true">↗</span></a>
+            </div>
+            <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
+                aria-controls="nav-links">☰</button>
+        </nav>
+    </header>
+
+    <main id="home">
+            </main>
+</body>
+</html>
